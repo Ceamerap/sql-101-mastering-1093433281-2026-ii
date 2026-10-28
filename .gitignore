@@ -218,3 +218,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+content/coffe-coop/data/sql/*.sql
+*.zip
