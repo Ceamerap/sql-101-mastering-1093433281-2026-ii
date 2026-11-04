@@ -1,5 +1,11 @@
 -- Exercise 10 - c
 -- Settlements: settlements of 2026-09-30 without deductions, with a check of the gross amount
+-- Explanation:
+-- Las columnas gross_cop y check_gross_cop muestran el mismo valor porque las dos salen de la misma operación: peso neto por precio por kilo aplicado.
+-- gross_amount es una columna generada (GENERATED ALWAYS ... STORED) entonces Postgres la calcula sola con esa fórmula cada vez que se guarda una
+-- liquidación y nadie puede escribirle un valor distinto. Mi columna check_gross_cop repite esa misma multiplicación dentro de la consulta,
+-- con los mismos datos de la misma fila, así que el resultado tiene que ser igual solo cambiaria la cantidad de decimales que se ven,
+-- porque gross_amount se guarda con 2 decimales y check_gross_cop muestra el producto completo.
 SELECT
     T1.settlement_id AS settlement,
     T1.delivery_id AS delivery,
@@ -12,7 +18,7 @@ FROM pay.settlements AS T1
 WHERE T1.settled_at >= '2026-09-30'
   AND T1.settled_at < '2026-10-01'
   AND T1.deductions_amount = 0;
-  
+
 /*
      settlement      |      delivery       | net_weight_kg | price_per_kg | deductions_cop | gross_cop  | check_gross_cop 
 ---------------------+---------------------+---------------+--------------+----------------+------------+-----------------
